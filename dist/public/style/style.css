@@ -1,0 +1,22 @@
+.menu-item{
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(165, 42, 42, 0.5); /* Brown with 50% transparency */
+    color: white;
+}
+
+div.Food-Difficulties{
+    display: none;
+}
+
+div.Music-Difficulties{
+    display: none;
+}
+
+div.Television-Difficulties{
+    display: none;
+}
+
+div.AnyTopic-Difficulties{
+    display: none;
+}

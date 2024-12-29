@@ -1,0 +1,199 @@
+<%- include('../partials/header') %>
+<div>Hello from EasyFood</div>
+<% if (easyFood) { %>
+    <p>The randomly picked word is: <%= easyFood %></p>
+<% } else { %>
+    <p>No place was retrieved.</p>
+<% } %>
+<div id="statement">
+    <button id="linkButtonW"><a href="/game/RandomAny" id="link"></a></button>
+</div>
+
+
+<script>
+   const pressedKeys = new Set();
+let previousKey = null;
+const thepressedKey = [];
+document.addEventListener("keydown", function handleKeyDown(event) {
+    const pressedKey = event.key.toLowerCase(); // Convert pressed key to lowercase
+
+    if(event.key === 'a'){
+        playKeyGameText('Are you sure about A? If so press enter, if not press another letter')
+    }if(event.key === 'b'){
+        playKeyGameText('Are you sure about B? press enter if yes,if not press another letter')
+    }if(event.key === 'c'){
+        playKeyGameText('Are you sure about C? press enter if yes, if not press another letter')
+    }if(event.key === 'd'){
+        playKeyGameText('Are you sure about D? press enter if yes, if not press another letter')
+    }if(event.key === 'e'){
+        playKeyGameText('Are you sure about E? press enter if yes, if not press another letter')
+    }if(event.key === 'f'){
+        playKeyGameText('Are you sure about F? press enter if yes, if not press another letter')
+    }if(event.key === 'g'){
+        playKeyGameText('Are you sure about G? press enter if yes, if not press another letter')
+    }if(event.key === 'h'){
+        playKeyGameText('Are you sure about H? press enter if yes, if not press another letter')
+    }if(event.key === 'i'){
+        playKeyGameText('Are you sure about I? press enter if yes, if not press another letter')
+    }if(event.key === 'j'){
+        playKeyGameText('Are you sure about J? press enter if yes, if not press another letter')
+    }if(event.key === 'k'){
+        playKeyGameText('Are you sure about K? press enter if yes, if not press another letter')
+    }if(event.key === 'l'){
+        playKeyGameText('Are you sure about L? press enter if yes, if not press another letter')
+    }if(event.key === 'm'){
+        playKeyGameText('Are you sure about M? press enter if yes, if not press another letter')
+    }if(event.key === 'n'){
+        playKeyGameText('Are you sure about N? press enter if yes, if not press another letter')
+    }if(event.key === 'o'){
+        playKeyGameText('Are you sure about O? press enter if yes, if not press another letter')
+    }if(event.key === 'p'){
+        playKeyGameText('Are you sure about P? press enter if yes, if not press another letter')
+    }if(event.key === 'q'){
+        playKeyGameText('Are you sure about Q? press enter if yes, if not press another letter')
+    }if(event.key === 'r'){
+        playKeyGameText('Are you sure about R? press enter if yes, if not press another letter')
+    }if(event.key === 's'){
+        playKeyGameText('Are you sure about S? press enter if yes, if not press another letter')
+    }if(event.key === 't'){
+        playKeyGameText('Are you sure about T? press enter if yes, if not press another letter')
+    }if(event.key === 'u'){
+        playKeyGameText('Are you sure about U? press enter if yes, if not press another letter')
+    }if(event.key === 'v'){
+        playKeyGameText('Are you sure about V? press enter if yes, if not press another letter')
+    }if(event.key === 'w'){
+        playKeyGameText('Are you sure about W? press enter if yes, if not press another letter')
+    }if(event.key === 'x'){
+        playKeyGameText('Are you sure about X? press enter if yes, if not press another letter')
+    }if(event.key === 'y'){
+        playKeyGameText('Are you sure about Y? press enter if yes, if not press another letter')
+    } if(event.key === 'z'){
+        playKeyGameText('Are you sure about Z? press enter if yes, if not press another letter')
+    } if(event.keyCode === 13){
+        // Process the pressed keys when Enter is pressed
+        processPressedKeys();
+    } else {
+        // Update the previous key if the pressed key is not Enter
+        previousKey = pressedKey;
+    }
+});
+
+function processPressedKeys() {
+    const randomGuessLetters = '<%= easyFood %>'.toLowerCase(); // Convert randomGuess to lowercase
+
+    if (previousKey !== null) {
+        if(thepressedKey.includes(previousKey)){
+            thepressedKey.pop(previousKey)
+            playGameText("You guessed that already")
+            playGameText("It won't be added up to your win or losecount")
+        }else{
+             // Add the previous key to the array
+        thepressedKey.push(previousKey)
+        
+            if (randomGuessLetters.includes(previousKey)) {
+        console.log("You entered:", previousKey, "Also:", previousKey.toString());
+        // Call a function to check if the pressed key is correct
+        rightOrWrong(previousKey);
+        youRight()
+        howMuchYouGotLeft()
+    } else {
+        rightOrWrong(previousKey)
+        youWrong()
+        console.log("LoseCount:", loseCount);
+    }
+                   
+        }
+        console.log("Pressed keys:", thepressedKey);
+    }else{
+        console.log("nothing")
+    }
+
+    // Check if the pressed key matches any letter in randomGuess
+
+    // Clear the pressed keys array
+    pressedKeys.clear();
+}
+
+function rightOrWrong(pressedKey) {
+    const charArray = '<%= easyFood %>'.toLowerCase().split('');
+    // Check if the pressed key is in the random guess
+    charArray.forEach((char) => {
+    if (char === pressedKey) {
+        winCount++
+        if(winCount === charArray.length){
+          
+            console.log("You win")
+            var linkAudio = new Audio()
+            var link = document.getElementById('link');
+        var gameOverStatement = document.getElementById('statement')
+        link.style.color = 'black';
+        link.innerHTML = 'Play Again?';
+        link.addEventListener("mouseenter",() =>{
+            linkAudio.src = '../audio/Play_Again.mp3'
+            linkAudio.play()
+        })
+        link.addEventListener("mouseleave", () => {
+        // Pause or stop playback when user moves away from the element
+        linkAudio.pause();
+        // Optionally, reset the playback to the beginning
+        linkAudio.currentTime = 0;
+    });
+        gameOverStatement.style.color = 'black'
+        playGameString('You won. <%= easyFood %> Was the word')
+        playGameString('Want to play again? Press the button below that says play again?')
+        }else{
+             console.log('keep going it is a W')
+        }
+        console.log("Your winner behind pressed:", pressedKey);
+        console.log("WinCount:", winCount);
+    } else{
+         loseCount++;
+        if(loseCount === charArray.length * 8){
+            // playGameString('You lost')
+        var linkAudio = new Audio()
+            var link = document.getElementById('link');
+        var gameOverStatement = document.getElementById('statement')
+        link.style.color = 'black';
+        link.innerHTML = 'Play Again?';
+        link.addEventListener("mouseenter",() =>{
+            linkAudio.src = '../audio/Play_Again.mp3'
+            linkAudio.play()
+        })
+        link.addEventListener("mouseleave", () => {
+        // Pause or stop playback when user moves away from the element
+        linkAudio.pause();
+        // Optionally, reset the playback to the beginning
+        linkAudio.currentTime = 0;
+    });
+        playGameText('Sorry you lost the word was');
+        playGameText('<%= easyFood %>');
+        playGameText('Want to play again? Press the button below that says play again?')
+         document.getElementById('linkButton').style.display = 'block';
+        }else{
+            console.log('Keep going its an L')
+        }
+        console.log("Your loser behind pressed:", pressedKey);
+    }
+}
+)}
+
+function youWrong(){
+    playGameText('incorrect')
+}
+
+function youRight(){
+    playGameText('Correct')
+}
+function howMuchYouGotLeft(){
+    const randomGuessLetters = '<%= easyFood %>'.toLowerCase(); // Convert randomGuess to lowercase
+    const charArray = randomGuessLetters.split('');
+
+    // Filter out the letters in the random guess that have not been pressed
+    const unguessedLetters = charArray.filter(char => !thepressedKey.includes(char));
+    
+    playGameTextWithNumber("There is:", unguessedLetters.length);
+    playGameText('letters left')
+}
+</script>
+<%- include('../partials/gameAudio') %>
+<%- include('../partials/footer') %>
