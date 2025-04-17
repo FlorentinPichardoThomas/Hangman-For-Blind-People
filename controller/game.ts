@@ -56,7 +56,7 @@ export async function mediumAny(req: Request, res: Response): Promise<void>{
 export async function hardAny(req: Request, res: Response): Promise<void>{
     try{
         const hardRandomGuess = hardRandomRetrieval()
-        res.render('games/hardAny', {hardRandomGuess})
+        res.render('games/HardAny', {hardRandomGuess})
     }catch(err){
 
     }
