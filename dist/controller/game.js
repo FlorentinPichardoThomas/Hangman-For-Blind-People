@@ -77,7 +77,7 @@ function hardAny(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const hardRandomGuess = hardRandomRetrieval();
-            res.render('games/hardAny', { hardRandomGuess });
+            res.render('games/HardAny', { hardRandomGuess });
         }
         catch (err) {
         }
