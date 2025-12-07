@@ -89,7 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
             travelsAudio.currentTime = 0;
         });
     }
-    playHomeText("Press any key to continue");
+    setTimeout(() =>{
+            playHomeText("Press any key to continue");
+    }, 2000)
     document.body.addEventListener('keydown', (ev) => {
         if (ev.key) {
             playHomeText("Select the topic you want the word to be about.");
