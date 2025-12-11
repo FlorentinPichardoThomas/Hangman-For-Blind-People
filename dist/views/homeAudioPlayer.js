@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const food = document.getElementById('food');
     const any = document.getElementById('randomness');
     const travel = document.getElementById('places');
+
+            playHomeText("Press any key to continue");
+
+    
     if (music) {
         music.addEventListener("mouseenter", () => {
             // Start playback when user hovers over the element
@@ -89,9 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             travelsAudio.currentTime = 0;
         });
     }
-    setTimeout(() =>{
-            playHomeText("Press any key to continue");
-    }, 2000)
+
     document.body.addEventListener('keydown', (ev) => {
         if (ev.key) {
             playHomeText("Select the topic you want the word to be about.");
