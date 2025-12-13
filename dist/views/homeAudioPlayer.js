@@ -1,102 +1,82 @@
 "use strict";
+
+// ---------- SPEECH FUNCTION ----------
+function speak(text) {
+    speechSynthesis.cancel(); // Prevent overlapping
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-US";
+    utter.rate = 1;
+    utter.pitch = 1;
+    speechSynthesis.speak(utter);
+    return utter;
+}
+
+// ---------- AUDIO OBJECTS ----------
 const musicAudio = new Audio();
 const foodAudio = new Audio();
 const randomAudio = new Audio();
 const travelsAudio = new Audio();
-function playHomeText(text) {
-    const utterance = new SpeechSynthesisUtterance();
-    utterance.text = text;
-    speechSynthesis.speak(utterance);
+
+// Preload audio (instant playback later)
+musicAudio.src = "/audio/Music-R.mp3";
+foodAudio.src = "/audio/Food-r.mp3";
+randomAudio.src = "/audio/Any-r.mp3";
+travelsAudio.src = "/audio/Places.mp3";
+
+musicAudio.load();
+foodAudio.load();
+randomAudio.load();
+travelsAudio.load();
+
+// ---------- HOVER SOUND FUNCTION ----------
+function attachHoverSound(elementId, audioObj) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+
+    el.addEventListener("mouseenter", () => {
+        audioObj.currentTime = 0;
+        audioObj.play();
+
+        setTimeout(() => {
+            audioObj.pause();
+            audioObj.currentTime = 0;
+        }, 1200);
+    });
+
+    el.addEventListener("mouseleave", () => {
+        audioObj.pause();
+        audioObj.currentTime = 0;
+    });
 }
+
+// ---------- MAIN INITIALIZATION ----------
 document.addEventListener("DOMContentLoaded", () => {
-    const music = document.getElementById('music');
-    const food = document.getElementById('food');
-    const any = document.getElementById('randomness');
-    const travel = document.getElementById('places');
+    // Attach hover sounds
+    attachHoverSound("music", musicAudio);
+    attachHoverSound("food", foodAudio);
+    attachHoverSound("randomness", randomAudio);
+    attachHoverSound("places", travelsAudio);
 
-            playHomeText("Press any key to continue");
+    // Speak automatically on page load (works without interaction)
+    speak("Press any key to continue.");
 
-    
-    if (music) {
-        music.addEventListener("mouseenter", () => {
-            // Start playback when user hovers over the element
-            musicAudio.src = '../audio/Music-R.mp3';
-            musicAudio.play();
-            console.log('playing easy');
-            setTimeout(() => {
-                musicAudio.pause();
-                musicAudio.currentTime = 0;
-                console.log('stopped playback');
-            }, 1200);
-        });
-        music.addEventListener("mouseleave", () => {
-            // Pause or stop playback when user moves away from the element
-            musicAudio.pause();
-            // Optionally, reset the playback to the beginning
-            musicAudio.currentTime = 0;
-        });
-    }
-    if (food) {
-        food.addEventListener("mouseenter", () => {
-            // Start playback when user hovers over the element
-            foodAudio.src = '../audio/Food-r.mp3';
-            foodAudio.play();
-            console.log('playing easy');
-            setTimeout(() => {
-                foodAudio.pause();
-                foodAudio.currentTime = 0;
-                console.log('stopped playback');
-            }, 1200);
-        });
-        food.addEventListener("mouseleave", () => {
-            // Pause or stop playback when user moves away from the element
-            foodAudio.pause();
-            // Optionally, reset the playback to the beginning
-            foodAudio.currentTime = 0;
-        });
-    }
-    if (any) {
-        any.addEventListener("mouseenter", () => {
-            // Start playback when user hovers over the element
-            randomAudio.src = '../audio/Any-r.mp3';
-            randomAudio.play();
-            console.log('playing easy');
-            setTimeout(() => {
-                randomAudio.pause();
-                randomAudio.currentTime = 0;
-                console.log('stopped playback');
-            }, 1200);
-        });
-        any.addEventListener("mouseleave", () => {
-            // Pause or stop playback when user moves away from the element
-            randomAudio.pause();
-            // Optionally, reset the playback to the beginning
-            randomAudio.currentTime = 0;
-        });
-    }
-    if (travel) {
-        travel.addEventListener("mouseenter", () => {
-            // Start playback when user hovers over the element
-            travelsAudio.src = '../audio/Places.mp3';
-            travelsAudio.play();
-            console.log('playing easy');
-            setTimeout(() => {
-                travelsAudio.pause();
-                travelsAudio.currentTime = 0;
-                console.log('stopped playback');
-            }, 1200);
-        });
-        travel.addEventListener("mouseleave", () => {
-            // Pause or stop playback when user moves away from the element
-            travelsAudio.pause();
-            // Optionally, reset the playback to the beginning
-            travelsAudio.currentTime = 0;
-        });
-    }
-
-    document.body.addEventListener('keydown', (ev) => {
+    // Wait for first key press to unlock audio
+    document.body.addEventListener("keydown", function onKeyPress(ev) {
         if (ev.key) {
-            playHomeText("Select the topic you want the word to be about.");
+            // speak instructions
+            speak("Select the topic you want the word to be about.");
+
+            // Unlock audio programmatically (plays 1 ms then stops)
+            // This marks audio as 'user interacted' in browser policy
+            [musicAudio, foodAudio, randomAudio, travelsAudio].forEach(a => {
+                a.play().then(() => {
+                    a.pause();
+                    a.currentTime = 0;
+                }).catch(() => {});
+            });
+
+            // Remove this event listener after running once
+            document.body.removeEventListener("keydown", onKeyPress);
         }
     });
 });
